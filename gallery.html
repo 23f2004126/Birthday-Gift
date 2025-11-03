@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magical Peacock Gallery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle, #2b0bca, #007f22e5, #ef0303f3);
+      font-family: 'Pacifico', cursive;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: gold;
+      text-shadow: 0 0 10px #00ffd5;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1.3em;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .carousel {
+      width: 100vw;
+      max-width: 100%;
+      height: 70vh;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: spin 60s linear infinite;
+      perspective: 2500px;
+    }
+
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 250px;
+      height: 350px;
+      margin: -175px 0 0 -125px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 3px solid #fff9c4;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 0 60px rgba(0, 255, 255, 0.3);
+      transition: transform 0.5s ease;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      filter: brightness(1.1) contrast(1.1) saturate(1.2);
+    }
+
+    /* 3D Positioning */
+    .card:nth-child(1) { transform: rotateY(0deg) translateZ(800px); z-index: 9; }
+    .card:nth-child(2) { transform: rotateY(36deg) translateZ(800px); z-index: 8; }
+    .card:nth-child(3) { transform: rotateY(72deg) translateZ(800px); z-index: 7; }
+    .card:nth-child(4) { transform: rotateY(108deg) translateZ(800px); z-index: 6; }
+    .card:nth-child(5) { transform: rotateY(144deg) translateZ(800px); z-index: 5; }
+    .card:nth-child(6) { transform: rotateY(180deg) translateZ(800px); z-index: 4; }
+    .card:nth-child(7) { transform: rotateY(216deg) translateZ(800px); z-index: 3; }
+    .card:nth-child(8) { transform: rotateY(252deg) translateZ(800px); z-index: 2; }
+    .card:nth-child(9) { transform: rotateY(288deg) translateZ(800px); z-index: 1; }
+    .card:nth-child(10) { transform: rotateY(324deg) translateZ(800px); z-index: 0; }
+
+    @keyframes spin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    .floating {
+      position: absolute;
+      animation: floatUp 10s linear infinite;
+      font-size: 24px;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Buttons container */
+    #buttonGroup {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1000;
+    }
+
+    #buttonGroup button {
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+      background: linear-gradient(45deg, #ffd700, #ffa500);
+      color: #3b2f0a;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      min-width: 140px;
+      text-align: center;
+    }
+
+    #buttonGroup button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(255, 223, 0, 1);
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 768px) {
+      #buttonGroup {
+        top: 10px;
+        left: 10px;
+        gap: 8px;
+      }
+
+      #buttonGroup button {
+        padding: 10px 22px;
+        font-size: 1rem;
+        min-width: 120px;
+      }
+    }
+
+    /* Soft fade shadow at bottom on mobile */
+    body::after {
+      content: "";
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+      pointer-events: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <h1>💚🌼💙</h1>
+  <h2 style="color: #1f1502; font-size: 1.4em; margin-bottom: 25px; text-shadow: 0 0 8px #ffa07a;">
+    Har ek tasveer mein chamakte ho tum,<br>
+    Jaise khud noor ho kisi kahaani ka ✨📸
+  </h2>
+
+  <div class="carousel">
+    <div class="card"><img src="assets/photos/1.jpeg" alt="photo 1" /></div>
+    <div class="card"><img src="assets/photos/2.jpeg" alt="photo 2" /></div>
+    <div class="card"><img src="assets/photos/3.jpeg" alt="photo 3" /></div>
+    <div class="card"><img src="assets/photos/4.jpeg" alt="photo 4" /></div>
+    <div class="card"><img src="assets/photos/5.jpeg" alt="photo 5" /></div>
+    <div class="card"><img src="assets/photos/6.jpeg" alt="photo 6" /></div>
+    <div class="card"><img src="assets/photos/7.jpeg" alt="photo 7" /></div>
+    <div class="card"><img src="assets/photos/8.jpeg" alt="photo 8" /></div>
+    <div class="card"><img src="assets/photos/9.jpeg" alt="photo 9" /></div>
+    <div class="card"><img src="assets/photos/10.jpeg" alt="photo 10" /></div>
+  </div>
+
+  <!-- Buttons container -->
+  <div id="buttonGroup">
+    <button id="playBtn">🎵 Play Music</button>
+    <button id="wheelRedirectBtn">🎡 Spin Wheel</button>
+  </div>
+
+  <!-- Audio element -->
+  <audio id="bgMusic" src="/assets/music/1.mp3" loop></audio>
+
+  <!-- Floating Emojis -->
+  <script>
+    const floatIcons = ['🪶', '🍃', '✨', '🌿', '🦚', '💫'];
+    function createFloatingEmoji() {
+      const elem = document.createElement('div');
+      elem.className = 'floating';
+      elem.innerText = floatIcons[Math.floor(Math.random() * floatIcons.length)];
+      elem.style.left = Math.random() * window.innerWidth + 'px';
+      elem.style.animationDuration = (8 + Math.random() * 5) + 's';
+      document.body.appendChild(elem);
+      setTimeout(() => document.body.removeChild(elem), 12000);
+    }
+
+    setInterval(createFloatingEmoji, 300);
+
+    // Music toggle
+    const playBtn = document.getElementById('playBtn');
+    const music = document.getElementById('bgMusic');
+
+    playBtn.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        playBtn.textContent = '⏸️ Pause Music';
+      } else {
+        music.pause();
+        playBtn.textContent = '🎵 Play Music';
+      }
+    });
+
+    // Spin Wheel button
+    document.getElementById('wheelRedirectBtn').addEventListener('click', () => {
+      location.href = 'wheel.html';
+    });
+  </script>
+</body>
+</html>

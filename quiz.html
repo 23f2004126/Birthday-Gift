@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Exam Quiz</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+    :root {
+      --warm-brown: #4b2e0b;
+      --soft-gold: #d9b44a;
+      --cream-bg: #84630ffa;
+      --dark-brown: #2f1b00;
+      --shadow-glow: #f6e27f;
+      --text-color: #3e2f0b;
+      --input-bg: #fff3b0;
+      --btn-bg: #d9b44a;
+      --btn-hover-bg: #c5a833;
+      --border-glow: #f8e76c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--cream-bg);
+      font-family: 'Courier Prime', monospace;
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 30px 20px 60px 20px;
+      user-select: none;
+      overflow-y: auto;
+    }
+
+    #container {
+      background-color: var(--warm-brown);
+      border-radius: 28px;
+      border: 7px solid var(--soft-gold);
+      box-shadow: 0 0 40px var(--shadow-glow);
+      max-width: 650px;
+      width: 90vw;
+      padding: 28px 36px 40px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin: 0 0 14px 0;
+      font-weight: 700;
+      text-shadow: 0 0 14px var(--soft-gold);
+    }
+
+    #nameInputContainer {
+      width: 100%;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    #nameInputContainer label {
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+      color: var(--soft-gold);
+    }
+
+    #nameInput {
+      width: 60%;
+      max-width: 280px;
+      font-size: 1.2rem;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 2px solid var(--soft-gold);
+      background-color: var(--input-bg);
+      color: var(--dark-brown);
+      outline: none;
+      box-shadow: 0 0 12px var(--border-glow);
+      text-align: center;
+    }
+
+    #nameInput:focus {
+      border-color: #fff;
+      box-shadow: 0 0 20px #fff;
+    }
+
+    #thinkingGifContainer {
+      width: 320px;
+      height: 180px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 5px solid var(--soft-gold);
+      box-shadow: inset 0 0 35px #fff2a6, 0 0 30px var(--soft-gold);
+      margin-bottom: 28px;
+    }
+
+    #thinkingGifContainer img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    #quizArea {
+      width: 100%;
+      max-width: 580px;
+      background-color: var(--input-bg);
+      border-radius: 18px;
+      box-shadow: 0 0 25px var(--shadow-glow);
+      padding: 22px 30px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--dark-brown);
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    #nextBtn {
+      margin-top: 32px;
+      background-color: var(--btn-bg);
+      border: none;
+      padding: 14px 40px;
+      border-radius: 30px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--warm-brown);
+      cursor: pointer;
+      box-shadow: 0 0 28px var(--btn-bg);
+      transition: background-color 0.3s ease;
+    }
+
+    #nextBtn:hover {
+      background-color: var(--btn-hover-bg);
+    }
+
+    #nextBtn:disabled {
+      background-color: #a49b66;
+      cursor: default;
+      box-shadow: none;
+      color: #5a4e0a;
+    }
+
+    #footerNote {
+      margin-top: 34px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--soft-gold);
+      text-align: center;
+    }
+
+    /* 🎁 Popup */
+    #popupOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    #popupBox {
+      background: var(--input-bg);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px var(--soft-gold);
+      text-align: center;
+      max-width: 90vw;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--warm-brown);
+    }
+
+    #popupBox button {
+      margin-top: 22px;
+      background-color: var(--btn-bg);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--dark-brown);
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--soft-gold);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      #thinkingGifContainer {
+        width: 90vw;
+        height: 160px;
+      }
+
+      #quizArea {
+        font-size: 1.1rem;
+        padding: 18px 22px;
+      }
+
+      #nameInput {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="container">
+    <h1>Love Exam Quiz 💛</h1>
+
+    <div id="nameInputContainer">
+      <label for="nameInput">What’s your name, dear?</label>
+      <input type="text" id="nameInput" placeholder="Type your name here..." autocomplete="off" />
+    </div>
+
+    <div id="thinkingGifContainer">
+      <img src="assets/thinking1.gif" alt="Thinking GIF" id="thinkingGif" />
+    </div>
+
+    <div id="quizArea">
+      Please enter your name above to start the quiz.
+    </div>
+
+    <button id="nextBtn" disabled>Show Next Question</button>
+
+    <div id="footerNote">
+      * Answer your partner’s questions with love & honesty! 💌
+    </div>
+  </div>
+
+  <!-- 🎁 Finish Popup -->
+  <div id="popupOverlay">
+    <div id="popupBox">
+      <p>Quiz complete! 💖 You're amazing. I Lob Uhhh.. <3</p>
+      <button onclick="window.location.href='wheel.html'"> Next 🎡</button>
+    </div>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById('nameInput');
+    const quizArea = document.getElementById('quizArea');
+    const nextBtn = document.getElementById('nextBtn');
+    const thinkingGif = document.getElementById('thinkingGif');
+    const popupOverlay = document.getElementById('popupOverlay');
+
+    const gifs = [
+      'assets/thinking1.gif',
+      'assets/thinking2.gif',
+      'assets/thinking3.gif',
+      'assets/thinking4.gif'
+    ];
+    let gifIndex = 0;
+
+    setInterval(() => {
+      gifIndex = (gifIndex + 1) % gifs.length;
+      thinkingGif.src = gifs[gifIndex];
+    }, 5000);
+
+    const questions = [
+      "What is your partner’s favorite color?",
+      "Name a quirky habit your partner does when they're nervous.",
+      "What is the one word your partner says the most in a conversation?",
+      "How does your partner react when they're really angry?",
+      "What’s the most surprising thing your partner has done for you?",
+      "Which song reminds you of your partner every time you hear it?",
+      "What is your partner’s dream travel destination?",
+      "How does your partner like to spend free time?",
+      "Name a movie your partner could watch on repeat forever.",
+      "What is something your partner is secretly really proud of?"
+    ];
+
+    let currentQuestionIndex = -1;
+    let userName = '';
+
+    function showNextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        quizArea.textContent = questions[currentQuestionIndex];
+        nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? "Finish Quiz" : "Show Next Question";
+      } else {
+        quizArea.textContent = `Thanks for taking the quiz, ${userName}! I lob uh 💖`;
+        nextBtn.disabled = true;
+        popupOverlay.style.display = 'flex'; // Show popup
+      }
+    }
+
+    nameInput.addEventListener('input', () => {
+      userName = nameInput.value.trim();
+      if (userName.length > 0) {
+        nextBtn.disabled = false;
+        quizArea.textContent = `Hi ${userName}! Ready to test your love knowledge? Click "Show Next Question" to begin.`;
+        currentQuestionIndex = -1;
+      } else {
+        nextBtn.disabled = true;
+        quizArea.textContent = "Please enter your name above to start the quiz.";
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      showNextQuestion();
+    });
+  </script>
+</body>
+<!-- 🔽 Add this at the very end, inside <body> but above </body> -->
+
+<!-- 🌐 Navigation Button -->
+<button id="navBtn" style="margin-top: 2rem;">Next ➡️</button>
+
+<!-- 🔘 Choice Menu -->
+<div id="choiceMenu" style="display: none; flex-direction: column; align-items: center; background: #f0e4c3; border-radius: 18px; padding: 1.5rem; box-shadow: 0 0 20px #b39a6a; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+  <h2 style="margin-bottom: 1rem; color: #5b4c2f;">Where would you like to go?</h2>
+  <button onclick="goToPage('future-letter.html')" style="margin: 0.5rem;">💌 Love Letter Page</button>
+  <button onclick="goToPage('chess.html')" style="margin: 0.5rem;">♟️ Chess Page</button>
+  <button onclick="goToPage('card.html')" style="margin: 0.5rem;">🎉 Birthday Bomb</button>
+  <button onclick="closeMenu()" style="margin-top: 1rem; background: #d44c4c; color: white;">Cancel</button>
+</div>
+
+<!-- 🔁 JS Script for Navigation -->
+<script>
+  const navBtn = document.getElementById("navBtn");
+  const choiceMenu = document.getElementById("choiceMenu");
+
+  navBtn.addEventListener("click", () => {
+    choiceMenu.style.display = "flex";
+  });
+
+  function closeMenu() {
+    choiceMenu.style.display = "none";
+  }
+
+  function goToPage(page) {
+    window.location.href = page;
+  }
+</script>
+
+</html>

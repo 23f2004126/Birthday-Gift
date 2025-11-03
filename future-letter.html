@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Write Your Love Letter</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #f8f0e3 0%, #cbb994 100%);
+      font-family: 'Playfair Display', serif;
+      color: #4a3c2f;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      height: 100%;
+    }
+
+    h1 {
+      font-family: 'Homemade Apple', cursive;
+      font-size: 3.4rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+      color: #6a4a3c;
+    }
+
+    p {
+      font-size: 1.6rem;
+      margin-bottom: 2rem;
+      color: #5a4d3a;
+      font-style: italic;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      min-height: 200px;
+      font-family: 'Homemade Apple', cursive;
+      font-size: 1.45rem;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      box-shadow: inset 2px 3px 7px #cbb17a;
+      background: #faf5e5;
+      color: #5b4730;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      background-color: #d9b967;
+      color: #453a15;
+      border: none;
+      border-radius: 32px;
+      padding: 12px 36px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      box-shadow: 0 0 25px #d9b967aa;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #b39a6a;
+      box-shadow: 0 0 38px #b39a6aaa;
+    }
+
+    .music-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #d9b967;
+      padding: 10px;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px #d9b967;
+    }
+
+    .music-btn:hover {
+      background-color: #b39a6a;
+      box-shadow: 0 0 25px #b39a6a;
+    }
+
+    .date {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #5b4c2f;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💌 Write Your Love Letter</h1>
+  <p>Write a heartfelt letter for your partner below. When you're done, click 'Download Letter' to save and share it with them.</p>
+  <textarea id="letterText" placeholder="Dear Future Me, ..."></textarea>
+
+  <button onclick="downloadLetter()">Download Letter 📥</button>
+
+  <div class="date" id="letterDate"></div>
+
+  <!-- Music button -->
+  <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">🎶 Play Music</button>
+
+  <!-- Music player -->
+  <audio id="backgroundMusic" loop>
+    <source src="assets/letter_song1.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <button id="nextBtn" style="margin-top: 2rem;">Next ➡️</button>
+
+  <div id="choiceMenu" style="display: none; flex-direction: column; align-items: center; background: #f0e4c3; border-radius: 18px; padding: 1.5rem; box-shadow: 0 0 20px #b39a6a; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+    <h2 style="margin-bottom: 1rem; color: #5b4c2f;">Where would you like to go?</h2>
+    <button onclick="goToPage('quiz.html')" style="margin: 0.5rem;">📝 Quiz Page</button>
+    <button onclick="goToPage('chess.html')" style="margin: 0.5rem;">♟️ Chess Page</button>
+    <button onclick="goToPage('card.html')" style="margin: 0.5rem;">🎉 Birthday Bomb</button>
+    <button onclick="closeMenu()" style="margin-top: 1rem; background: #d44c4c; color: white;">Cancel</button>
+  </div>
+
+  <script>
+    // --- Music Toggle Logic ---
+    let isMusicPlaying = false;
+    const musicPlayer = document.getElementById('backgroundMusic');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        musicPlayer.pause();
+        musicToggleBtn.innerText = '🎶 Play Music';
+      } else {
+        musicPlayer.play().then(() => {
+          console.log("Music playing successfully 🎵");
+        }).catch(error => {
+          console.error('Playback failed:', error);
+          alert('Could not play music. Check if "letter_song1.mp3" is in the assets folder.');
+        });
+        musicToggleBtn.innerText = '⏸️ Pause Music';
+      }
+      isMusicPlaying = !isMusicPlaying;
+    }
+
+    // --- Download Letter Function ---
+    function downloadLetter() {
+      const letterContent = document.getElementById('letterText').value;
+      const currentDate = new Date().toLocaleString();
+      const fullContent = `Written on: ${currentDate}\n\n${letterContent}`;
+
+      if (letterContent.trim() === "") {
+        alert("Please write a letter before downloading!");
+        return;
+      }
+
+      document.getElementById('letterDate').innerText = `Written on: ${currentDate}`;
+
+      const blob = new Blob([fullContent], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'love-letter.txt';
+      link.click();
+    }
+
+    // --- Navigation Menu Logic ---
+    const nextBtn = document.getElementById("nextBtn");
+    const choiceMenu = document.getElementById("choiceMenu");
+
+    nextBtn.addEventListener("click", () => {
+      choiceMenu.style.display = "flex";
+    });
+
+    function closeMenu() {
+      choiceMenu.style.display = "none";
+    }
+
+    function goToPage(page) {
+      window.location.href = page;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Birthday Wheel - Playful Version</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+#birthdayBombBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 14px 30px;
+  font-size: 1.4rem;
+  background-color: #ff6eb4;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 25px #ff6eb4, 0 0 40px #ff6eb4;
+  font-weight: 900;
+  text-shadow: 1px 1px 4px #fff;
+  z-index: 99;
+  transition: background-color 0.3s ease;
+}
+#birthdayBombBtn:hover {
+  background-color: #d05287;
+  box-shadow: 0 0 30px #d05287, 0 0 50px #d05287;
+}
+
+    body {
+    border: 15px solid #0e8945;
+    box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e2a78, #4e63a7);
+      font-family: 'Comic Neue', cursive, sans-serif;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5em;
+      text-shadow: 0 0 10px #ff6eb4, 0 0 20px #ffde59;
+      letter-spacing: 2px;
+    }
+
+    #wheel-container {
+      position: relative;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      padding: 15px;
+      background:
+        radial-gradient(circle at center, #ffde59 45%, transparent 46%),
+        conic-gradient(#ff6eb4, #5adb5a, #ffde59, #ff6eb4, #5adb5a, #ffde59);
+      box-shadow: 0 0 40px #ff6eb4, inset 0 0 20px #5adb5a;
+      animation: pulseBorder 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseBorder {
+      0% {
+        box-shadow: 0 0 20px #ff6eb4, inset 0 0 10px #5adb5a;
+      }
+      100% {
+        box-shadow: 0 0 40px #ff6eb4, inset 0 0 25px #5adb5a;
+      }
+    }
+
+    canvas#wheel {
+      background: #f7f7f7;
+      border-radius: 50%;
+      box-shadow:
+        0 0 40px #ff6eb4,
+        inset 0 0 30px #5adb5a;
+      display: block;
+      margin: 0 auto;
+      transition: transform 0.3s ease;
+    }
+
+    canvas#wheel:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 60px #ff6eb4,
+        inset 0 0 40px #5adb5a;
+      cursor: pointer;
+    }
+
+    #spinBtn {
+      margin-top: 35px;
+      padding: 16px 60px;
+      font-size: 1.6rem;
+      border-radius: 35px;
+      border: none;
+      background: linear-gradient(45deg, #ffde59, #ff6eb4, #5adb5a);
+      color: #222222;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow:
+        0 0 25px #ffde59,
+        0 0 40px #ff6eb4;
+      transition: background 0.4s ease, transform 0.2s ease;
+      user-select: none;
+      text-shadow: 1px 1px 3px #fff;
+    }
+    #spinBtn:hover {
+      background: linear-gradient(45deg, #5adb5a, #ffde59, #ff6eb4);
+      transform: scale(1.1);
+    }
+    #spinBtn:active {
+      transform: scale(0.95);
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 1.7rem;
+      font-weight: 900;
+      text-shadow: 0 0 15px #ff6eb4, 0 0 25px #ffde59;
+      min-height: 3rem;
+      letter-spacing: 1.3px;
+      user-select: none;
+    }
+
+    /* Redirect Button Styles */
+    #redirectBtn {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 18px 48px;
+      font-size: 1.7rem;
+      background-color: #ff6eb4;
+      color: white;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow:
+        0 0 35px #ff6eb4,
+        0 0 70px #ff6eb4;
+      font-weight: 900;
+      user-select: none;
+      animation: bounce 1.5s ease-in-out infinite;
+      text-shadow: 1px 1px 5px #fff;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+    #redirectBtn:hover {
+      background-color: #d05287;
+      box-shadow:
+        0 0 50px #d05287,
+        0 0 80px #d05287;
+    }
+
+    /* Bounce animation for button */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+      50% {
+        transform: translate(-50%, -50%) translateY(-12px);
+      }
+    }
+
+    /* Floating balloons background */
+    .balloon {
+      position: fixed;
+      bottom: -150px;
+      width: 40px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, #ff6eb4, #c7007b);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: floatUp linear infinite;
+      opacity: 0.8;
+      box-shadow:
+        inset -2px -3px 8px #e052a0,
+        0 5px 5px rgba(0,0,0,0.2);
+    }
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background: #444;
+      transform: translateX(-50%);
+      border-radius: 1px;
+      box-shadow: 0 5px 5px rgba(0,0,0,0.2);
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+     
+
+  </style>
+</head>
+   
+<body>
+
+  <h1>Spin the Birthday Wheel!</h1>
+
+  <div id="wheel-container">
+    <canvas id="wheel" width="400" height="400"></canvas>
+    <!-- Redirect button injected here -->
+  </div>
+
+  <button id="spinBtn">Spin 🎉</button>
+  <button id="birthdayBombBtn">🎁 Birthday Bomb</button>
+  <div id="result"></div>
+  <!-- Balloons background -->
+  <div class="balloon" style="left: 10vw; animation-duration: 15s; animation-delay: 0s;"></div>
+  <div class="balloon" style="left: 25vw; animation-duration: 18s; animation-delay: 3s; background: radial-gradient(circle at 30% 30%, #ffde59, #c7a700);"></div>
+  <div class="balloon" style="left: 40vw; animation-duration: 14s; animation-delay: 1s; background: radial-gradient(circle at 30% 30%, #5adb5a, #0b660b);"></div>
+  <div class="balloon" style="left: 60vw; animation-duration: 20s; animation-delay: 5s;"></div>
+  <div class="balloon" style="left: 80vw; animation-duration: 16s; animation-delay: 2s; background: radial-gradient(circle at 30% 30%, #ff6eb4, #a50054);"></div>
+
+  <script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const resultDiv = document.getElementById('result');
+
+    const segments = [
+      { label: 'Letter', color: '#ffde59', url: 'future-letter.html' },
+      { label: 'Chess', color: '#5adb5a', url: 'chess.html' },
+      { label: 'Quiz', color: '#ff6eb4', url: 'quiz.html' },
+      { label: 'Letter', color: '#ffde59', url: 'future-letter.html' },
+      { label: 'Chess', color: '#5adb5a', url: 'chess.html' },
+      { label: 'Quiz', color: '#ff6eb4', url: 'quiz.html' },
+    ];
+
+    const numSegments = segments.length;
+    const anglePerSegment = (2 * Math.PI) / numSegments;
+
+    let currentAngle = 0;
+    let spinTimeout = null;
+    let spinVelocity = 0;
+    let isSpinning = false;
+    let selectedSegment = null;
+
+    function drawWheel() {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 20;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw segments
+      for (let i = 0; i < numSegments; i++) {
+        const startAngle = i * anglePerSegment + currentAngle;
+        const endAngle = startAngle + anglePerSegment;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = segments[i].color;
+        ctx.shadowColor = 'rgba(0,0,0,0.15)';
+        ctx.shadowBlur = 6;
+        ctx.fill();
+
+        // Text styling & placement
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + anglePerSegment / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#222222';  // dark text for contrast
+        ctx.font = 'bold 24px "Comic Neue", cursive, sans-serif';
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.7)';
+        ctx.shadowBlur = 3;
+        ctx.fillText(segments[i].label.toUpperCase(), radius - 20, 12);
+        ctx.restore();
+      }
+
+      // Center circle with glow
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 70, 0, 2 * Math.PI);
+      ctx.fillStyle = '#ffde59';
+      ctx.shadowColor = '#ff6eb4';
+      ctx.shadowBlur = 25;
+      ctx.fill();
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = '#5adb5a';
+      ctx.stroke();
+
+      // Pointer with glow
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY - radius - 15);
+      ctx.lineTo(centerX - 18, centerY - radius + 33);
+      ctx.lineTo(centerX + 18, centerY - radius + 33);
+      ctx.closePath();
+      ctx.fillStyle = '#ff6eb4';
+      ctx.shadowColor = '#ff6eb4';
+      ctx.shadowBlur = 25;
+      ctx.fill();
+    }
+
+    function spin() {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinVelocity = Math.random() * 0.3 + 0.3;
+
+      removeRedirectBtn();
+
+      function animate() {
+        if (spinVelocity <= 0.002) {
+          isSpinning = false;
+          determineSegment();
+          return;
+        }
+        currentAngle += spinVelocity;
+        currentAngle %= 2 * Math.PI;
+        spinVelocity *= 0.97;
+
+        drawWheel();
+        spinTimeout = requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    function determineSegment() {
+      // ✅ Fixed the angle issue here
+      const adjustedAngle = (2 * Math.PI - currentAngle + Math.PI / 2) % (2 * Math.PI);
+      const index = Math.floor(adjustedAngle / anglePerSegment) % numSegments;
+      selectedSegment = segments[index];
+
+      resultDiv.textContent = `You landed on: ${selectedSegment.label}!`;
+
+      createRedirectBtn(selectedSegment);
+    }
+
+    function createRedirectBtn(segment) {
+      removeRedirectBtn();
+
+      if (!segment) return;
+
+      const btn = document.createElement('button');
+      btn.id = 'redirectBtn';
+      btn.textContent = `Lesss goooo → ${segment.label}`;
+      btn.style.position = 'absolute';
+      btn.style.left = '50%';
+      btn.style.top = '50%';
+      btn.style.transform = 'translate(-50%, -50%)';
+      btn.style.padding = '18px 48px';
+      btn.style.fontSize = '1.7rem';
+      btn.style.backgroundColor = '#ff6eb4';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+      btn.style.borderRadius = '40px';
+      btn.style.cursor = 'pointer';
+      btn.style.boxShadow =
+        '0 0 35px #ff6eb4, 0 0 70px #ff6eb4';
+      btn.style.fontWeight = '900';
+      btn.style.userSelect = 'none';
+      btn.style.animation = 'bounce 1.5s ease-in-out infinite';
+      btn.style.textShadow = '1px 1px 5px #fff';
+      btn.style.transition = 'background-color 0.3s ease';
+      btn.style.zIndex = '10';
+
+      btn.addEventListener('mouseenter', () => {
+        btn.style.backgroundColor = '#d05287';
+        btn.style.boxShadow = '0 0 50px #d05287, 0 0 80px #d05287';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.backgroundColor = '#ff6eb4';
+        btn.style.boxShadow = '0 0 35px #ff6eb4, 0 0 70px #ff6eb4';
+      });
+
+      btn.addEventListener('click', () => {
+        window.location.href = segment.url;
+      });
+
+      const container = canvas.parentElement;
+      container.style.position = 'relative';
+      container.appendChild(btn);
+    }
+
+    function removeRedirectBtn() {
+      const existingBtn = document.getElementById('redirectBtn');
+      if (existingBtn) {
+        existingBtn.remove();
+      }
+    }
+
+    drawWheel();
+
+    spinBtn.addEventListener('click', spin);
+    document.getElementById('birthdayBombBtn').addEventListener('click', () => {
+  window.location.href = 'card.html';
+});
+
+  </script>
+  
+
+</body>
+</html>

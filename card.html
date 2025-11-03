@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Birthday Bomb Card 🎉</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
+    :root {
+      --pink-light: #e1c611;
+      --pink-dark: #c85a7a;
+      --pink-shadow: #e6df09;
+      --text-color: #5a2133;
+      --button-bg: #c85a7a;
+      --button-hover: #a84660;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Courier Prime', monospace;
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+      user-select: none;
+      overflow: hidden;
+      background: linear-gradient(-45deg, #ce125d, #ce125d, #ff86b6, #ffc6e5);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    #cardContainer {
+      background: rgb(248, 174, 222);
+      padding: 56px;
+      border-radius: 28px;
+      box-shadow: 0 0 40px var(--pink-shadow);
+      max-width: 1500px;
+      max-height: 95vh;
+      overflow: hidden;
+      display: flex;
+      user-select: none;
+      gap: 40px;
+    }
+
+    #gifsContainer, #gifsContainerRight {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      overflow-y: auto;
+      max-height: calc(95vh - 112px);
+      max-width: 180px;
+      padding-right: 8px;
+      user-select: none;
+      border-right: 3px solid var(--pink-dark);
+      padding-bottom: 20px;
+    }
+
+    #gifsContainerRight {
+      border-left: 3px solid var(--pink-dark);
+      border-right: none;
+      padding-left: 8px;
+    }
+
+    .gifThumb {
+      width: 120px;
+      height: 120px;
+      border-radius: 14px;
+      object-fit: cover;
+      cursor: pointer;
+      box-shadow: 0 0 14px var(--pink-shadow);
+      transition: transform 0.3s ease;
+      border: 3px solid transparent;
+      flex-shrink: 0;
+    }
+
+    .gifThumb:hover {
+      transform: scale(1.15);
+      border-color: var(--pink-dark);
+    }
+
+    .gifThumb.active {
+      border-color: var(--pink-dark);
+      box-shadow: 0 0 22px var(--pink-dark);
+      transform: scale(1.2);
+    }
+
+    #mainContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+      max-width: calc(100vw - 360px); /* left + right gif containers */
+    }
+
+    #cardImage {
+      max-width: 100%;
+      max-height: 65vh;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 0 25px var(--pink-shadow);
+      user-select: none;
+      margin-bottom: 26px;
+      background: #fff0f6;
+    }
+
+    #btnContainer {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background-color: var(--button-bg);
+      border: none;
+      padding: 14px 30px;
+      border-radius: 30px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 28px var(--button-bg);
+      transition: background-color 0.3s ease;
+      user-select: none;
+      flex-grow: 1;
+      max-width: 220px;
+      text-align: center;
+      outline-offset: 3px;
+    }
+
+    button:hover {
+      background-color: var(--button-hover);
+    }
+
+    #gifsContainer::-webkit-scrollbar,
+    #gifsContainerRight::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    #gifsContainer::-webkit-scrollbar-thumb,
+    #gifsContainerRight::-webkit-scrollbar-thumb {
+      background: var(--pink-dark);
+      border-radius: 5px;
+    }
+
+    #gifsContainer::-webkit-scrollbar-track,
+    #gifsContainerRight::-webkit-scrollbar-track {
+      background: #ffe6f0;
+    }
+
+    @media (max-width: 768px) {
+      #cardContainer {
+        flex-direction: column;
+        max-height: none;
+      }
+      #gifsContainer, #gifsContainerRight {
+        flex-direction: row;
+        max-height: 140px;
+        max-width: 100%;
+        border-right: none;
+        border-left: none;
+        border-bottom: 3px solid var(--pink-dark);
+        padding: 0 0 8px 0;
+        overflow-x: auto;
+        gap: 12px;
+      }
+      .gifThumb {
+        width: 90px;
+        height: 90px;
+      }
+      #mainContent {
+        max-width: 100%;
+        align-items: center;
+      }
+      #btnContainer {
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #cardImage {
+        max-height: 45vh;
+      }
+      button {
+        max-width: 100%;
+        flex-grow: unset;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="cardContainer" role="main" aria-label="Birthday Card with gifs and music">
+    
+    <!-- Left GIF Bar -->
+    <div id="gifsContainer" aria-label="Selectable gif thumbnails">
+      <img src="assets/card1.gif" alt="Gif 1" class="gifThumb active" loading="lazy" />
+      <img src="assets/card2.gif" alt="Gif 2" class="gifThumb" loading="lazy" />
+      <img src="assets/card3.gif" alt="Gif 3" class="gifThumb" loading="lazy" />
+      <img src="assets/card4.gif" alt="Gif 4" class="gifThumb" loading="lazy" />
+      <img src="assets/card5.gif" alt="Gif 5" class="gifThumb" loading="lazy" />
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+      <img
+        src="assets/card.png"
+        alt="Birthday card image"
+        id="cardImage"
+        loading="lazy"
+      />
+
+      <div id="btnContainer">
+        <button id="playMusicBtn" aria-pressed="false" aria-label="Play birthday music">Play Music 🎶</button>
+        <button id="goToKalamBtn" aria-label="Go to Kalam page">Real Birthday Surprise</button>
+        <!-- New Cake Button -->
+        <button id="goToCakeBtn" aria-label="Go to Cake page">Go to Cake 🎂</button>
+      </div>
+    </div>
+
+    <!-- Right GIF Bar -->
+    <div id="gifsContainerRight" aria-label="More gif thumbnails">
+      <img src="assets/card9.gif" alt="Gif 6" class="gifThumb" loading="lazy" />
+      <img src="assets/card7.gif" alt="Gif 7" class="gifThumb" loading="lazy" />
+      <img src="assets/card10.gif" alt="Gif 8" class="gifThumb" loading="lazy" />
+      <img src="assets/card6.gif" alt="Gif 9" class="gifThumb" loading="lazy" />
+      <img src="assets/card8.gif" alt="Gif 10" class="gifThumb" loading="lazy" />
+    </div>
+
+  </div>
+
+  <audio id="birthdayMusic" src="assets/song.mp3" preload="auto"></audio>
+
+  <script>
+    const cardImage = document.getElementById('cardImage');
+    const gifThumbs = document.querySelectorAll('.gifThumb');
+    const playMusicBtn = document.getElementById('playMusicBtn');
+    const birthdayMusic = document.getElementById('birthdayMusic');
+    const goToKalamBtn = document.getElementById('goToKalamBtn');
+    const goToCakeBtn = document.getElementById('goToCakeBtn');
+
+    const gifToCardMap = {
+      'assets/card1.gif': 'assets/card1.gif',
+      'assets/card2.gif': 'assets/card2.gif',
+      'assets/card3.gif': 'assets/card3.gif',
+      'assets/card4.gif': 'assets/card4.gif',
+      'assets/card5.gif': 'assets/card5.gif',
+      'assets/card6.gif': 'assets/card6.gif',
+      'assets/card7.gif': 'assets/card7.gif',
+      'assets/card8.gif': 'assets/card10.gif',
+      'assets/card9.gif': 'assets/card9.gif',
+      'assets/card10.gif': 'assets/card8.gif',
+    };
+
+    gifThumbs.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        gifThumbs.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+
+        const filename = thumb.src.split('/').pop();
+        const newSrc = gifToCardMap[`assets/${filename}`] || 'assets/card1.jpg';
+        cardImage.src = newSrc;
+      });
+    });
+
+    playMusicBtn.addEventListener('click', () => {
+      if (birthdayMusic.paused) {
+        birthdayMusic.play();
+        playMusicBtn.textContent = 'Pause Music ⏸️';
+        playMusicBtn.setAttribute('aria-pressed', 'true');
+      } else {
+        birthdayMusic.pause();
+        playMusicBtn.textContent = 'Play Music 🎶';
+        playMusicBtn.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    goToKalamBtn.addEventListener('click', () => {
+      window.location.href = 'kalam.html';
+    });
+
+    // New Cake Button functionality
+    goToCakeBtn.addEventListener('click', () => {
+      window.location.href = 'CAKE/cake.html';
+    });
+  </script>
+</body>
+</html>

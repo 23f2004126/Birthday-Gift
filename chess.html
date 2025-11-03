@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Chess Game</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #5a3e1b, #c9a14d);
+      color: #3b2f0a;
+      font-family: 'Comic Neue', cursive, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #4b3a00;
+      text-shadow: 0 0 10px #bca357;
+    }
+   
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(8, 48px);
+      grid-template-rows: repeat(8, 48px);
+      border: 4px solid #6b4c15;
+      border-radius: 15px;
+      box-shadow: 0 0 30px #7d6215 inset;
+      user-select: none;
+      background: #c9a14d;
+    }
+    .square {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      cursor: pointer;
+      color: #3b2f0a;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+    .light {
+      background-color: #f1d18a; /* pale yellow */
+    }
+    .dark {
+      background-color: #6b4c15; /* dark brown */
+    }
+    .selected {
+      outline: 3px solid #bca357;
+      outline-offset: -3px;
+      box-shadow: 0 0 10px #bca357;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #4b3a00;
+      text-shadow: 0 0 8px #bca357;
+    }
+    a.back-btn {
+      margin-top: 25px;
+      padding: 12px 30px;
+      background: #6b4c15;
+      color: #f1d18a;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 30px;
+      box-shadow: 0 0 30px #6b4c15;
+      user-select: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    a.back-btn:hover {
+      background-color: #bca357;
+      color: #3b2f0a;
+      box-shadow: 0 0 40px #bca357;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Chess Game</h1>
+
+  <div id="board"></div>
+  <div id="status">White's turn</div>
+  <a href="wheel.html" class="back-btn">← Back to Wheel</a>
+
+  <script>
+    const boardEl = document.getElementById('board');
+    const statusEl = document.getElementById('status');
+
+    const piecesUnicode = {
+      'r': '♜', 'n': '♞', 'b': '♝', 'q': '♛', 'k': '♚', 'p': '♟',
+      'R': '♖', 'N': '♘', 'B': '♗', 'Q': '♕', 'K': '♔', 'P': '♙'
+    };
+
+    let board = [
+      ['r','n','b','q','k','b','n','r'],
+      ['p','p','p','p','p','p','p','p'],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['P','P','P','P','P','P','P','P'],
+      ['R','N','B','Q','K','B','N','R'],
+    ];
+
+    let selectedSquare = null;
+    let currentTurn = 'white';
+
+    function renderBoard() {
+      boardEl.innerHTML = '';
+      for(let row=0; row<8; row++) {
+        for(let col=0; col<8; col++) {
+          const square = document.createElement('div');
+          square.classList.add('square');
+          (row + col) % 2 === 0 ? square.classList.add('light') : square.classList.add('dark');
+          square.dataset.row = row;
+          square.dataset.col = col;
+
+          const piece = board[row][col];
+          square.textContent = piecesUnicode[piece] || '';
+
+          if (selectedSquare && selectedSquare.row == row && selectedSquare.col == col) {
+            square.classList.add('selected');
+          }
+
+          square.addEventListener('click', () => onSquareClick(row, col));
+          boardEl.appendChild(square);
+        }
+      }
+    }
+
+    function onSquareClick(row, col) {
+      const piece = board[row][col];
+      if (!selectedSquare) {
+        if (piece && ((currentTurn === 'white' && piece === piece.toUpperCase()) || (currentTurn === 'black' && piece === piece.toLowerCase()))) {
+          selectedSquare = {row, col};
+          renderBoard();
+        }
+      } else {
+        if (canMove(selectedSquare.row, selectedSquare.col, row, col)) {
+          movePiece(selectedSquare.row, selectedSquare.col, row, col);
+          selectedSquare = null;
+          currentTurn = currentTurn === 'white' ? 'black' : 'white';
+          statusEl.textContent = `${capitalize(currentTurn)}'s turn`;
+          renderBoard();
+        } else {
+          selectedSquare = null;
+          renderBoard();
+        }
+      }
+    }
+
+    function canMove(fromRow, fromCol, toRow, toCol) {
+      const piece = board[fromRow][fromCol];
+      if (!piece) return false;
+      const target = board[toRow][toCol];
+      if (target && ((piece.toUpperCase() === piece && target.toUpperCase() === target) || (piece.toLowerCase() === piece && target.toLowerCase() === target))) {
+        return false;
+      }
+      const rowDiff = Math.abs(toRow - fromRow);
+      const colDiff = Math.abs(toCol - fromCol);
+      return rowDiff <= 1 && colDiff <= 1;
+    }
+
+    function movePiece(fromRow, fromCol, toRow, toCol) {
+      board[toRow][toCol] = board[fromRow][fromCol];
+      board[fromRow][fromCol] = '';
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    renderBoard();
+  </script>
+<button id="nextBtn" class="back-btn" style="margin-top: 2rem;">Next ➡️</button>
+
+<div id="choiceMenu" style="display: none; flex-direction: column; align-items: center; background: #f0e4c3; border-radius: 18px; padding: 1.5rem; box-shadow: 0 0 20px #b39a6a; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+  <h2 style="margin-bottom: 1rem; color: #5b4c2f;">Where would you like to go?</h2>
+  <button onclick="goToPage('quiz.html')" style="margin: 0.5rem;">📝 Quiz Page</button>
+  <button onclick="goToPage('future-letter.html')" style="margin: 0.5rem;">♟️ Letter Page</button>
+  <button onclick="goToPage('card.html')" style="margin: 0.5rem;">🎉 Birthday Bomb</button>
+  <button onclick="closeMenu()" style="margin-top: 1rem; background: #d44c4c; color: white;">Cancel</button>
+</div>
+
+  <script>
+const nextBtn = document.getElementById("nextBtn");
+const choiceMenu = document.getElementById("choiceMenu");
+
+nextBtn.addEventListener("click", () => {
+  choiceMenu.style.display = "flex";
+});
+
+function closeMenu() {
+  choiceMenu.style.display = "none";
+}
+
+function goToPage(page) {
+  window.location.href = page;
+}
+</script>
+
+</body>
+
+</html>
