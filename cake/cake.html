@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blow Out Candles - Party Time!</title>
+  <style>
+    /* Background & font */
+    body {
+      margin: 0;
+      padding-top: 180px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #3899ee;
+      overflow-x: hidden;
+      text-align: center;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 2.8rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      z-index: 20;
+      user-select: none;
+    }
+
+    #status {
+      margin-top: 25px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      min-height: 24px;
+      z-index: 20;
+      user-select: none;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 30px;
+      background: #f44;
+      color: white;
+      box-shadow: 0 5px 15px rgba(244,68,68,0.4);
+      transition: background 0.3s ease;
+      z-index: 20;
+      user-select: none;
+    }
+
+    button:hover {
+      background: #d22;
+    }
+
+    /* Cake container */
+    .cake-container {
+      position: relative;
+      margin: 40px auto 0;
+      width: 300px;
+      height: 220px;
+      user-select: none;
+      z-index: 5;
+    }
+
+    .cake {
+      width: 280px;
+      height: 180px;
+      background: linear-gradient(135deg, #d21ea8 0%, #d21ea8 100%);
+      border-radius: 40px 40px 25px 25px;
+      position: relative;
+      box-shadow: inset 0 8px 15px rgba(255, 200, 120, 0.8), 0 6px 10px rgba(0, 0, 0, 0.2);
+      margin: 0 auto;
+    }
+
+    .frosting {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      height: 60px;
+      background: #f9f8f8;
+      border-radius: 40px 40px 10px 10px;
+      box-shadow: inset 0 3px 8px #d31135;
+      z-index: 2;
+    }
+
+    .sprinkle {
+      position: absolute;
+      width: 8px;
+      height: 4px;
+      background: #f45;
+      border-radius: 2px;
+      box-shadow: 0 0 4px #d23;
+    }
+
+    .sprinkle1 { top: 10px; left: 40px; transform: rotate(15deg);}
+    .sprinkle2 { top: 20px; left: 80px; transform: rotate(-30deg);}
+    .sprinkle3 { top: 12px; left: 130px; transform: rotate(45deg);}
+    .sprinkle4 { top: 18px; left: 190px; transform: rotate(-10deg);}
+    .sprinkle5 { top: 15px; left: 230px; transform: rotate(25deg);}
+
+    .candles {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 22px;
+      z-index: 10;
+    }
+
+    .candle {
+      position: relative;
+      width: 18px;
+      height: 60px;
+      background: #f44;
+      border-radius: 6px;
+      box-shadow: inset 0 3px 6px #c22;
+    }
+
+    .flame {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 30px;
+      background: radial-gradient(circle at center, orange 40%, transparent 70%);
+      border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+      animation: flicker 0.3s infinite alternate;
+      filter: drop-shadow(0 0 8px rgb(255, 77, 0));
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      z-index: 15;
+    }
+
+    .flame.blown {
+      animation: none;
+      opacity: 0;
+      filter: none;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      100% { transform: translateX(-50%) scale(1.1); opacity: 0.8; }
+    }
+
+    .big-balloon {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 160px;
+      background: radial-gradient(circle at 50% 30%, #ff6, #f90);
+      border-radius: 60% 60% 70% 70% / 80% 80% 100% 100%;
+      box-shadow: inset -10px -20px 30px #fda, 0 10px 15px rgba(255,165,0,0.7);
+      animation: floatBounce 4s ease-in-out infinite;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    @keyframes floatBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-15px); }
+    }
+
+    .popup-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ff4757;
+      color: white;
+      font-weight: 700;
+      font-size: 2rem;
+      padding: 30px 50px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(25, 1, 3, 0.7);
+      user-select: none;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .popup-message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* 🎁 Gift Button */
+    #giftButton {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #ff4081;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 20px #ff80ab, 0 0 30px #ff4081;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    #giftButton:hover {
+      background-color: #e91e63;
+      box-shadow: 0 0 30px #e91e63, 0 0 50px #ff80ab;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="big-balloon"></div>
+
+  <div class="cake-container">
+    <div class="cake">
+      <div class="frosting"></div>
+      <div class="sprinkle sprinkle1"></div>
+      <div class="sprinkle sprinkle2"></div>
+      <div class="sprinkle sprinkle3"></div>
+      <div class="sprinkle sprinkle4"></div>
+      <div class="sprinkle sprinkle5"></div>
+    </div>
+    <div class="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+  </div>
+
+  <div id="status">Please make a wish !!🙏</div>
+  <button id="relight">Relight Candles</button>
+
+  <div class="popup-message" id="popupMessage">
+    YAYYYYYYYYYYYYYY BURST THE BALLOONS NOW!
+  </div>
+
+  <button id="burstButton">Burst Balloons</button>
+
+  <!-- 🎁 Gift Button -->
+  <button id="giftButton">🎁 Gift</button>
+
+  <script>
+    const status = document.getElementById('status');
+    const flames = document.querySelectorAll('.flame');
+    const relightBtn = document.getElementById('relight');
+    const popup = document.getElementById('popupMessage');
+    const burstButton = document.getElementById('burstButton');
+    const giftButton = document.getElementById('giftButton');
+
+    // Redirect to burst.html
+    burstButton.addEventListener('click', () => {
+      window.location.href = 'burst.html';
+    });
+    // 🎁 Redirect to music.html when Gift button clicked
+giftButton.addEventListener('click', () => {
+  location.href = '../music.html'; // Go up one folder level
+});
+
+    let blowDetected = false;
+    let ignoreSoundUntil = Date.now() + 10000;
+    let baseline = 0;
+    let baselineSamples = 0;
+    const blowFramesNeeded = 6;
+    let blowingFrames = 0;
+
+    async function setupAudio() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        function update() {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          const average = sum / dataArray.length;
+
+          if (Date.now() < ignoreSoundUntil) {
+            baseline = (baseline * baselineSamples + average) / (baselineSamples + 1);
+            baselineSamples++;
+            status.textContent = "Please make a wish !!🙏";
+          } else {
+            if (average > baseline + 15) blowingFrames++;
+            else blowingFrames = 0;
+
+            if (blowingFrames > blowFramesNeeded && !blowDetected) {
+              blowDetected = true;
+              extinguishCandles();
+              showPopup();
+              status.textContent =
+                "🎉 Happy Birthday!! 🎂 May your days be filled with happiness and music! 💖";
+            } else if (!blowDetected) {
+              status.textContent = "Blow into the microphone to blow out the candles!";
+              relightBtn.style.display = 'inline-block';
+            }
+          }
+
+          requestAnimationFrame(update);
+        }
+
+        update();
+      } catch (err) {
+        status.textContent = "Microphone access denied or unavailable.";
+        console.error(err);
+      }
+    }
+
+    function extinguishCandles() {
+      flames.forEach(flame => flame.classList.add('blown'));
+    }
+
+    function relightCandles() {
+      flames.forEach(flame => flame.classList.remove('blown'));
+      blowDetected = false;
+      popup.classList.remove('show');
+      status.textContent = "Blow into the microphone to blow out the candles!";
+      ignoreSoundUntil = Date.now() + 3000;
+      baselineSamples = 0;
+      baseline = 0;
+    }
+
+    function showPopup() {
+      popup.classList.add('show');
+      popup.style.display = 'block';
+      setTimeout(() => {
+        popup.classList.remove('show');
+        popup.style.display = 'none';
+      }, 5000);
+    }
+
+    relightBtn.addEventListener('click', relightCandles);
+    setupAudio();
+  </script>
+</body>
+</html>
